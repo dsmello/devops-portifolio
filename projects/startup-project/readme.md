@@ -81,3 +81,49 @@ Look at the [terraform](./terraform/) folder to see the code. And look at the [a
 - Github account
 
 ## How to use:
+
+- Setup the enviroment variables:
+
+Variable | Where to find | Description
+--- | --- | ---
+TF_VAR_civo_api_key | The Civo Cloud API Key | The API Key to access the Civo Cloud
+TF_BACKEND_CONFIG | The Terraform backend config | The Terraform backend config to store the state in the object storage must contain the `access_key` and the `secret_key`
+TF_VAR_github_token | The Github Token | The Github Token to access read the Gitops repo repository and comment the PRs
+TF_VAR_operator_ip | The Operator IP | The IP that will be allowed to access the infrastructure Eg: `x.x.x.x/32`
+
+- Programs to install:
+
+Program | Required | Where to find | Description
+--- | --- | --- | ---
+Terraform | Yes | [Terraform](https://www.terraform.io/downloads.html) | The Terraform binary
+Kubectl | No | [Kubectl](https://kubernetes.io/docs/tasks/tools/) | The Kubectl binary
+HELM | No | [HELM](https://helm.sh/docs/intro/install/) | The HELM binary
+Teleport | No | [Teleport](https://goteleport.com/teleport/download/) | The Teleport binary
+
+- Create the infrastructure:
+
+```bash
+make cloud_init
+make cloud_plan
+make cloud_apply
+```
+
+- To destroy the infrastructure:
+
+```bash
+make cloud_destroy
+```
+
+- To deploy the Devops Tooling:
+
+```bash
+make tooling_init
+make tooling_plan
+make tooling_apply
+```
+
+- To destroy the Devops Tooling:
+
+```bash
+make tooling_destroy
+```

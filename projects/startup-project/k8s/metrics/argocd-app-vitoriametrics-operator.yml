@@ -1,25 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: metrics  
+  name: vitoriametrics-operator  
   # You'll usually want to add your resources to the argocd namespace.
   namespace: argocd
   # Add this finalizer ONLY if you want these to cascade delete.
-  # finalizers:
-  #   - resources-finalizer.argocd.argoproj.io
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
   # Add labels to your application object.
   labels:
-    kind: metrics-manifests
-    app: ingress-acme
+    app: vitoriametrics-operator
 spec:
   # The project the application belongs to.
   project: devops-tools
 
   # Source of the application manifests
   source:
-    repoURL: https://github.com/dsmello/devops-portifolio  # Can point to either a Helm chart repo or a git repo.
-    targetRevision: "HEAD"  # For Helm, this refers to the chart version.
-    path: projects/startup-project/k8s/metrics
+    repoURL: https://victoriametrics.github.io/helm-charts/  # Can point to either a Helm chart repo or a git repo.
+    targetRevision: "0.23.1"  # For Helm, this refers to the chart version.
+    chart: victoria-metrics-operator
 
 
   # Destination cluster and namespace to deploy the application

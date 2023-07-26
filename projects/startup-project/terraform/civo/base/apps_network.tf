@@ -40,7 +40,7 @@ resource "civo_firewall" "apps_k8s_cp" {
 // With allows the HTTP and HTTPS traffic to the load balancer.
 resource "civo_firewall" "apps_k8s_lb" {
     name = "apps-k8s-lb"
-    network_id = civo_network.devops.id
+    network_id = civo_network.apps.id
     create_default_rules = false
 
     ingress_rule {

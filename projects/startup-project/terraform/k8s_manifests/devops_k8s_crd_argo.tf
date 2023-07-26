@@ -8,7 +8,7 @@ resource "kubernetes_manifest" "argocd-project" {
 
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
-    kind = "Application" 
+    kind = "AppProject" 
     metadata = {
       name = "devops-tools"
       namespace = local.namespace_argocd

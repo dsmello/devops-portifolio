@@ -4,7 +4,7 @@ terraform {
   backend "s3" {
     endpoint                    = "https://objectstore.fra1.civo.com"
     bucket                      = "terraform-states"
-    key                         = "kubernetes_crd/terraform.tfstate"
+    key                         = "kubernetes_manifests/terraform.tfstate"
     region                      = "fra1"
     skip_region_validation      = true
     skip_credentials_validation = true

@@ -28,6 +28,12 @@ resource "kubernetes_manifest" "argocd-project" {
               kind = "*"
           }
       ]
+      namespaceResourceWhitelist = [
+          {
+              group = "*"
+              kind = "*"
+          }
+      ]
     }
   }
 }

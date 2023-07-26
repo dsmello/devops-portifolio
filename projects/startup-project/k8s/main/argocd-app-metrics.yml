@@ -11,6 +11,8 @@ metadata:
   labels:
     kind: metrics-manifests
     app: ingress-acme
+    group: metrics
+    
 spec:
   # The project the application belongs to.
   project: devops-tools

@@ -1,11 +1,5 @@
 resource "helm_release" "devops-argo-cd" {
-   provider = helm.helmdevops
-
-  provisioner "file" {
-    source = local_sensitive_file.devops_kubeconfig.filename
-    destination = "${local.devops_kubeconfig_path}.tmp"
-    when = create
-  }
+  provider = helm.helmdevops
 
   name       = "devops-argocd"
   namespace = "argocd"
@@ -19,47 +13,14 @@ resource "helm_release" "devops-argo-cd" {
       value = "ClusterIP"
   }
 
-}
+  description = "The main CD tool for the DevOps Cluster"
 
-# Will use App of Apps pattern to deploy ArgoCD projects
-resource "kubernetes_manifest" "argocd-project" {
-  provider = kubernetes.kubedevops
-
-  depends_on = [ helm_release.devops-argo-cd ]
-  manifest = {
-    apiVersion = "argoproj.io/v1alpha1"
-    kind = "AppProject"
-    metadata = {
-        name = "devops-tools"
-        namespace = helm_release.devops-argo-cd.namespace
-    }
-    spec = {
-        description = "The 'App' of Apps used to deploy all other applications"
-        sourceRepos = [ "*" ]
-        destinations = [
-            {
-                namespace = "*"
-                server = "https://kubernetes.default.svc"
-            }
-        ]
-        clusterResourceWhitelist = [
-          {
-              group = "*"
-              kind = "*"
-          }
-      ]
-    }
-  }
 }
 
 # Argocd : Github Credentials
 resource "kubernetes_secret_v1" "argocd-project-github-cred" {
   provider = kubernetes.kubedevops
-  provisioner "file" {
-    source = local_sensitive_file.devops_kubeconfig.filename
-    destination = "${local.devops_kubeconfig_path}.tmp"
-    when = create
-  }
+
   depends_on = [ helm_release.devops-argo-cd ]
   metadata {
     name = "argocd-github-cred"
@@ -83,29 +44,35 @@ resource "kubernetes_secret_v1" "argocd-project-github-cred" {
   }
 }
 
-# ArgoCD : Application
-
-resource "kubernetes_manifest" "argocd-project-app" {
+# Argocd : Apps Cluster Credentials
+resource "kubernetes_secret_v1" "argocd-project-apps-cluster-cred" {
   provider = kubernetes.kubedevops
+
   depends_on = [ helm_release.devops-argo-cd ]
-  manifest = {
-      apiVersion = "argoproj.io/v1alpha1"
-      kind = "Application"
-      metadata = {
-          name = "devops-tools"
-          namespace = helm_release.devops-argo-cd.namespace
+  metadata {
+    name = "apps-cluster-creddentials"
+    namespace = helm_release.devops-argo-cd.namespace
+    labels = {
+        "argocd.argoproj.io/secret-type" = "cluster"
+    }
+  }
+
+  data = {
+    name = "apps-cluster"
+    server = module.kubeconfig_apps.host
+    config = jsonencode({
+      tlsClientConfig = {
+        caData = module.kubeconfig_apps.certificate_authority_data_b64
+        certData = module.kubeconfig_apps.client_certificate_data_b64
+        keyData =  module.kubeconfig_apps.client_key_data_b64
+        serverName = module.kubeconfig_apps.host
       }
-      spec = {
-          project = "devops-tools"
-          source = {
-              repoURL = "https://github.com/${var.github_user}/devops-portifolio"
-              targetRevision = "HEAD"
-              path = "projects/startup-project/k8s/main"
-          }
-          destination = {
-              server = "https://kubernetes.default.svc"
-              namespace = "default"
-          }
-      }
+    })
+  }
+
+  lifecycle {
+    ignore_changes = [
+        data
+    ]
   }
 }

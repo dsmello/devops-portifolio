@@ -65,8 +65,9 @@ resource "kubernetes_secret_v1" "argocd-project-apps-cluster-cred" {
         caData = module.kubeconfig_apps.certificate_authority_data_b64
         certData = module.kubeconfig_apps.client_certificate_data_b64
         keyData =  module.kubeconfig_apps.client_key_data_b64
+        serverName = "kubernetes"
         # serverName = module.kubeconfig_apps.host
-        insecure = true
+        # insecure = true
       }
     })
   }

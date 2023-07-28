@@ -14,7 +14,7 @@ metadata:
     group: network
 spec:
   # The project the application belongs to.
-  project: apps-cluster
+  project: devops-tools
 
   # Source of the application manifests
   source:

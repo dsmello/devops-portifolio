@@ -26,8 +26,8 @@ spec:
 
   # Destination cluster and namespace to deploy the application
   destination:
-    name: apps-cluster
-    namespace: default
+    name: in-cluster
+    namespace: argocd-apps-cluster
     
   # Sync policy
   syncPolicy:

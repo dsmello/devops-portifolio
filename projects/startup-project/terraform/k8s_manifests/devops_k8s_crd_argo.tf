@@ -19,7 +19,7 @@ resource "kubernetes_manifest" "argocd-project" {
         destinations = [
             {
                 namespace = "*"
-                server = "https://kubernetes.default.svc"
+                server = "*"
             }
         ]
         clusterResourceWhitelist = [

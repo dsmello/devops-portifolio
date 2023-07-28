@@ -15,7 +15,7 @@ metadata:
     
 spec:
   # The project the application belongs to.
-  project: devops-tools
+  project: apps-cluster
 
   # Source of the application manifests
   source:

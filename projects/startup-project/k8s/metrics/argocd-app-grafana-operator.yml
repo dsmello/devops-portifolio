@@ -17,8 +17,8 @@ spec:
   # Source of the application manifests
   # oci://ghcr.io/grafana-operator/helm-charts/grafana-operator v5.3.0
   source:
-    repoURL: 'oci://ghcr.io/grafana-operator/helm-charts'  # Can point to either a Helm chart repo or a git repo.
-    targetRevision: "v5.3.0"  # For Helm, this refers to the chart version.
+    repoURL: 'ghcr.io/grafana-operator/helm-charts'  # Can point to either a Helm chart repo or a git repo.
+    targetRevision: v5.3.0  # For Helm, this refers to the chart version.
     chart: grafana-operator
 
 
@@ -47,17 +47,4 @@ spec:
         duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
         factor: 2 # a factor to multiply the base duration after each failed retry
         maxDuration: 3m # the maximum amount of time allowed for the backoff strategy
-
-  # Will ignore differences between live and desired states during the diff. Note that these configurations are not
-  # used during the sync process.
-  # ignoreDifferences:
-  # for the specified managedFields managers
-  # - group: "apps"
-  #   kind: "*"
-
-
-  # RevisionHistoryLimit limits the number of items kept in the application's revision history, which is used for
-  # informational purposes as well as for rollbacks to previous versions. This should only be changed in exceptional
-  # circumstances. Setting to zero will store no history. This will reduce storage used. Increasing will increase the
-  # space used to store the history, so we do not recommend increasing it.
   revisionHistoryLimit: 10
